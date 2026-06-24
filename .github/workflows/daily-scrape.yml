@@ -2,7 +2,7 @@ name: Work Sharp Daily Price Scrape
 
 on:
   schedule:
-    - cron: '0 21 * * *'   # 7 AM AEST (UTC+10) = 9 PM UTC previous day
+    - cron: '0 16 * * *'   # 2 AM AEST (UTC+10) = 4 PM UTC previous day
   workflow_dispatch:         # allow manual trigger from GitHub UI
 
 jobs:
