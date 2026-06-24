@@ -12,7 +12,7 @@ jobs:
       contents: write        # needed to commit CSV files back to repo
 
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v4.2.2
 
       - name: Run price scrape
         env:
