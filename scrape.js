@@ -21,6 +21,7 @@ const SKU_MAP = {
   'WSBCHPAJ-1':    'WSBCHPAJ-I',
   'WSSA0004772-I': 'WSSA0004772',
   'WSHHDPVT':      'WSHHDPVT-I',
+  'WSHHDPV-I':     'WSHHDPVT-I',   // TT variant — same product as WSHHDPVT-I
   'WSCHPAJ-ELT-I': 'WSBCHPAJ-ELT',
   'WSKTS2-A':      'WSKTS2-I',
   'WSKTNRKS-I':    'WSKTNRKS',
@@ -133,19 +134,21 @@ async function main() {
     const highest  = prices.length ? Math.max(...prices) : '';
     const avg      = prices.length ? Math.round(prices.reduce((a,b) => a+b,0) / prices.length * 100) / 100 : '';
 
+    const r2 = v => Math.round(v * 100) / 100;
+
     let matchPrice = '', note = '';
     if (p.tt > 0 && p.st > 0) {
-      if (p.tt === p.st) { matchPrice = roundNickel(p.tt);            note = `TT and ST same — matched at $${p.tt}`; }
-      else               { matchPrice = roundNickel((p.tt+p.st)/2);   note = `Midpoint TT $${p.tt} / ST $${p.st}`; }
+      if (p.tt === p.st) { matchPrice = r2(roundNickel(p.tt));          note = `TT and ST same — matched at $${p.tt}`; }
+      else               { matchPrice = r2(roundNickel((p.tt+p.st)/2)); note = `Midpoint TT $${p.tt} / ST $${p.st}`; }
     } else if (p.tt > 0) {
-      matchPrice = roundNickel(p.tt); note = `Matched Total Tools $${p.tt} (ST not listed)`;
+      matchPrice = r2(roundNickel(p.tt)); note = `Matched Total Tools $${p.tt} (ST not listed)`;
     } else if (p.st > 0) {
-      matchPrice = roundNickel(p.st); note = `Matched Sydney Tools $${p.st} (TT not listed)`;
+      matchPrice = r2(roundNickel(p.st)); note = `Matched Sydney Tools $${p.st} (TT not listed)`;
     } else {
       note = 'No competitor prices — set manually';
     }
 
-    csvRows.push([today, sku, p.name, p.tt||'', p.ttStock, p.st||'', p.stStock, prices.length, cheapest, highest, avg, matchPrice, note]);
+    csvRows.push([today, sku, p.name, p.tt ? r2(p.tt) : '', p.ttStock, p.st ? r2(p.st) : '', p.stStock, prices.length, cheapest ? r2(cheapest) : '', highest ? r2(highest) : '', avg ? r2(avg) : '', matchPrice, note]);
   }
 
   // Write files
