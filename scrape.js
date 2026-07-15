@@ -22,6 +22,7 @@ const SKU_MAP = {
   'WSSA0004772-I': 'WSSA0004772',
   'WSHHDPVT':      'WSHHDPVT-I',
   'WSHHDPV-I':     'WSHHDPVT-I',   // TT variant — same product as WSHHDPVT-I
+  'WSHHDPT-I':     'WSHHDPVT-I',   // Firecrawl occasionally drops the V
   'WSCHPAJ-ELT-I': 'WSBCHPAJ-ELT',
   'WSKTS2-A':      'WSKTS2-I',
   'WSKTNRKS-I':    'WSKTNRKS',
@@ -53,7 +54,7 @@ async function scrapeUrl(supplier, url) {
         url,
         formats: ['extract'],
         extract: {
-          prompt: 'Extract all Work Sharp brand products from this page. Return product name, SKU/model number (e.g. WSGFS221, WSBCHPAJ-I), price in AUD as a number only, and whether in stock.',
+          prompt: 'Extract all Work Sharp brand products from this page. For each product return: product name, SKU/model number, price in AUD as a number only, and whether in stock. IMPORTANT: Copy the SKU/model number exactly as it appears on the page — do not abbreviate, guess, or modify it in any way. Every character matters including letters, numbers, and hyphens (e.g. WSHHDPVT-I not WSHHDPT-I).',
           schema: {
             type: 'object',
             properties: {
